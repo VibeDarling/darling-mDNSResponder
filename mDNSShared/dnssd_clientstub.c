@@ -1549,7 +1549,8 @@ DNSServiceErrorType DNSSD_API DNSServiceQueryRecord
         DNSServiceRefDeallocate(*sdRef);
         *sdRef = NULL;
 #if APPLE_OSX_mDNSResponder
-        xpc_forget(&defaults);
+        if (defaults) xpc_release(defaults);
+        defaults = NULL;
 #endif
         return kDNSServiceErr_NoMemory;
     }
@@ -1562,7 +1563,8 @@ DNSServiceErrorType DNSSD_API DNSServiceQueryRecord
     if (defaults)
     {
         put_tlvs_for_defaults(defaults, hdr, &ptr);
-        xpc_forget(&defaults);
+        if (defaults) xpc_release(defaults);
+        defaults = NULL;
     }
 #endif
     err = deliver_request(hdr, *sdRef);     // Will free hdr for us
@@ -1687,7 +1689,8 @@ DNSServiceErrorType DNSSD_API DNSServiceGetAddrInfo
         DNSServiceRefDeallocate(*sdRef);
         *sdRef = NULL;
 #if APPLE_OSX_mDNSResponder
-        xpc_forget(&defaults);
+        if (defaults) xpc_release(defaults);
+        defaults = NULL;
 #endif
         return kDNSServiceErr_NoMemory;
     }
@@ -1699,7 +1702,8 @@ DNSServiceErrorType DNSSD_API DNSServiceGetAddrInfo
     if (defaults)
     {
         put_tlvs_for_defaults(defaults, hdr, &ptr);
-        xpc_forget(&defaults);
+        if (defaults) xpc_release(defaults);
+        defaults = NULL;
     }
 #endif
     err = deliver_request(hdr, *sdRef);     // Will free hdr for us

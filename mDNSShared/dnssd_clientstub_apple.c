@@ -54,7 +54,8 @@ DNSServiceSetResolverDefaults(const void * const plist_data_ptr, const size_t pl
 	g_defaults_dict = new_dict;
 	os_unfair_lock_unlock(&g_defaults_lock);
 
-	xpc_forget(&old_dict);
+	if (old_dict) xpc_release(old_dict);
+	old_dict = NULL;
 	err = kDNSServiceErr_NoError;
 
 exit:
